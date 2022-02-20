@@ -741,13 +741,13 @@ public class GrandPrixScript : MonoBehaviour
 					if (Eliminated != "NoDrop")
 					{
 						PerformedAction = Eliminated + " is out of the race.";
-						int DifferenceToAssign = 0;
+						int Difference = 0;
 						for (int i = 0; i < LeaderDifference.Length; i++)
 						{
 							if (LeaderDifference[i] <= 89999999)
 							{
-								DifferenceToAssign++;
-								LeaderDifference[i] = DifferenceToAssign;
+								Difference++;
+								LeaderDifference[i] = Difference;
 							}
 						}
 						int Place = 0;
@@ -766,7 +766,45 @@ public class GrandPrixScript : MonoBehaviour
 						LeaderDifference[Place] = 90000000; //9000000X are dropouts.
 					}
 
-					//URGENT: MAKE RULES FOR RESTART RULES.
+					int DifferenceToAssign = 0;
+					if (BombInfo.IsIndicatorOn(Indicator.BOB))
+                    {
+						for (int i = 0; i < LeaderDifference.Length; i++)
+						{
+							if (LeaderDifference[i] <= 100)
+							{
+								DifferenceToAssign += 2;
+								LeaderDifference[i] = DifferenceToAssign;
+							}
+						}
+					}
+					else if (LapCount == BombInfo.GetBatteryCount())
+                    {
+						for (int i = 0; i < 10; i++)
+						{
+							if (LeaderDifference[i] <= 100)
+							{
+								DifferenceToAssign += 5;
+								LeaderDifference[i] = DifferenceToAssign;
+							}
+						}
+					}
+					else if (BombInfo.GetSerialNumberNumbers().First() == CurrentSectorNumber || BombInfo.GetSerialNumberNumbers().Last() == CurrentSectorNumber)
+					{
+						bool Even = false;
+						for (int i = 0; i < LeaderDifference.Length; i++)
+						{
+							if (!Even)
+                            {
+								if (LeaderDifference[i] <= 100)
+								{
+									DifferenceToAssign += 2;
+									LeaderDifference[i] = DifferenceToAssign;
+								}
+							}
+							Even = !Even;
+						}
+					}
 
 					break;
 				}
