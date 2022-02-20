@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: 7f810193cf65d67449d5a970c61978ef
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Formula1
+  fontNames:
+  - Formula1
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: b64fc279f9db67241bc1964a5ab501ec, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

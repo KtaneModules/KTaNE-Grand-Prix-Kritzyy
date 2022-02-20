@@ -1,0 +1,509 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <title>Grand Prix — Keep Talking and Nobody Explodes Module</title>
+    <meta name="viewport" content="initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="css/normalize.css">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link rel="stylesheet" type="text/css" href="css/font.css">
+    <script src="js/ktane-utils.js"></script>
+</head>
+<body>
+    <div class="section">
+        <div class="page page-bg-01">
+            <div class="page-header">
+                <span class="page-header-doc-title">Keep Talking and Nobody Explodes Mod</span>
+                <span class="page-header-section-title">Grand Prix</span>
+            </div>
+            <div class="page-content">
+                <img src="img/Component/Manual.svg" class="diagram">
+                <h2>On the Subject of the Grand Prix</h2>
+                <p class="flavour-text">And it's lights out and away we go!</p>
+				<p class="appendix-reference">SEE APPENDIX F1 FOR A LIST OF ALL DRIVERS, THEIR INITIALS AND THEIR RESPECTIVE TEAM.</p>
+				<p>This module consists of a Formula 1 racing leaderboard, with all the drivers from the teams in the 2020-2021 season. It displays the times relative to one another and the sector they're currently in. 
+				Next to the leaderboard is a display with a lap count, a flag below it, and an information box.</p>
+				<p>Everytime you solve a different module, the lap count will go up by one, and a new flag will be shown. Each flag will be accompanied by information which will be displayed in the info box below the flag. This information could be about in which sector this flag is being shown, or for which driver, or both.</p>
+				<p>Each flag has an impact on the current standings, by changing the time difference between cars. The time difference between two cars is called the "delta". When a driver increases their delta, the difference between their car and the one behind it becomes bigger. If a driver's delta is negative, they have been overtaken by the car behind.</p>
+				<p>When you reach the final lap, which is shown next to the current lap, use the flags given and their info to determine the final standings at the end of the race to solve the module.
+				To swap positions, first press the driver you want to swap, and then the driver you want to swap that driver with. Press the flag at the final lap to submit the order.</p>
+				<p>If the order is incorrect, a strike will be handed. When that happens, the positions will be reset, all the deltas will be displayed next to the drivers again and you can choose one lap to review its info by navigating with the arrow keys, and pressing the flag again to review that lap. Lastly, to retry the submission, press the down arrow after reviewing a lap.</p>
+				
+            </div>
+            <div class="page-footer relative-footer">Page 1 of 6</div>
+        </div>
+        <div class="page page-bg-02">
+            <div class="page-header">
+                <span class="page-header-doc-title">Keep Talking and Nobody Explodes Mod</span>
+                <span class="page-header-section-title">Grand Prix</span>
+            </div>
+            <div class="page-content">
+				<h3>Table A: List of flags and their actions.</h3>
+				<p>For consistency's sake, all drivers are driving at equal pace/speed and there are no overtakes aside from when a driver increases their delta due to flags.
+				<u>The only factor that changes the grid standings are the flags.</u></p>
+				<table style="border-collapse: collapse; width: 99.1364%; height: 82px;" border="1">
+<tbody>
+<tr style="height: 28px;">
+<td style="width: 33.3333%; height: 28px; text-align: center;">
+<h4>Flag type</h4>
+</td>
+<td style="width: 33.3333%; height: 28px; text-align: center;">
+<h4>Flag icon</h4>
+</td>
+<td style="width: 33.3333%; height: 28px; text-align: center;">
+<h4>Flag effect</h4>
+</td>
+</tr>
+<tr style="height: 54px;">
+<td style="width: 33.3333%; height: 54px;">Track clear</td>
+<td style="width: 33.3333%; height: 54px; text-align: center;"><img src="img/Flags/Green.png" alt="" /></td>
+<td style="width: 33.3333%; height: 54px;">For every other module you solve, there is a chance this module will show this flag. While this flag is shown, the deltas of all the cars will be displayed next to the driver name. Be sure to write them all down, because after the next solve, all deltas will dissapear again.</td>
+</tr>
+</tbody>
+</table>
+<p>&nbsp;</p>
+				<table style="border-collapse: collapse; width: 99.1364%; height: 82px;" border="1">
+				<tbody>
+				<tr style="height: 28px;">
+				<td style="width: 33.3333%; height: 28px; text-align: center;">
+				<h4>Flag type</h4>
+				</td>
+				<td style="width: 33.3333%; height: 28px; text-align: center;">
+				<h4>Flag icon</h4>
+				</td>
+				<td style="width: 33.3333%; height: 28px; text-align: center;">
+				<h4>Flag effect</h4>
+				</td>
+				</tr>
+				<tr style="height: 54px;">
+				<td style="width: 33.3333%; height: 54px;">Warning</td>
+				<td style="width: 33.3333%; height: 54px; text-align: center;"><img src="img/Flags/Yellow.png" alt="" /></td>
+				<td style="width: 33.3333%; height: 54px;">
+				<ul>
+				<li>If any driver is in the same sector as the flag's sector number, increase their delta by 1 second.</li>
+				<li>Unless if the letters "SC" are within the flag, in which case a Safety Car will be deployed, and everyone's delta will be set to 2 seconds.</li>
+				</ul>
+				</td>
+				</tr>
+				</tbody>
+				</table>
+            </div>
+            <div class="page-footer relative-footer">Page 2 of 6</div>
+        </div>
+		<div class="page page-bg-02">
+            <div class="page-header">
+                <span class="page-header-doc-title">Keep Talking and Nobody Explodes Mod</span>
+                <span class="page-header-section-title">Grand Prix</span>
+            </div>
+            <div class="page-content">
+				<h3>Table A: List of flags and their actions. (Cont.)</h3>
+				<table style="border-collapse: collapse; width: 99.1364%; height: 82px;" border="1">
+				<tbody>
+				<tr style="height: 28px;">
+				<td style="width: 33.3333%; height: 28px; text-align: center;">
+				<h4>Flag type</h4>
+				</td>
+				<td style="width: 33.3333%; height: 28px; text-align: center;">
+				<h4>Flag icon</h4>
+				</td>
+				<td style="width: 33.3333%; height: 28px; text-align: center;">
+				<h4>Flag effect</h4>
+				</td>
+				</tr>
+				<tr>
+				<td style="width: 33.3333%;">Backmarkers</td>
+				<td style="width: 33.3333%; text-align: center;"><img src="img/Flags/Blue.png" alt="" /></td>
+				<td style="width: 33.3333%;">
+				<ul>
+				<li>If the driver started in the top 3 and the driver is in sector 1, <u>decrease</u> their delta by 0,5 seconds.</li>
+				<li>Otherwise if 5 laps have passed, increase their delta by 1 second.</li>
+				<li>Otherwise, increase their delta by 0,75 seconds.</li>
+				</ul>
+				</td>
+				</tr>
+				<tr style="height: 54px;">
+				<td style="width: 33.3333%; height: 54px;">Suspension</td>
+				<td style="width: 33.3333%; height: 54px; text-align: center;"><img src="img/Flags/Red.png" alt="" /></td>
+				<td style="width: 33.3333%; height: 54px;">
+				<ul>
+				<li>If a driver name is displayed, they crashed and go to the lowest availible position.*</li>
+				<li>Because of the flag, regardless of if someone crashed, the race will be restarted and everyone's delta will be 1 second.</li>
+				</ul>
+				</td>
+				</tr>
+				</tbody>
+				</table>
+            </div>
+            <div class="page-footer relative-footer">Page 3 of 6</div>
+        </div>
+        <div class="page page-bg-03">
+            <div class="page-header">
+                <span class="page-header-doc-title">Keep Talking and Nobody Explodes Mod</span>
+                <span class="page-header-section-title">Grand Prix</span>
+            </div>
+            <div class="page-content">
+				<table style="border-collapse: collapse; width: 99.1364%; height: 82px;" border="1">
+					<tbody>
+					<tr>
+					<td style="width: 33.3333%;">Penalty</td>
+					<td style="width: 33.3333%; text-align: center;"><img src="img/Flags/Penalty.png" alt="" /></td>
+					<td style="width: 33.3333%;">
+					<ul>
+					<li>The driver below is the driver penalized. Refer to Section C for the penalties.</li>
+					</ul>
+					</td>
+					</tr>
+					<tr>
+					<td style="width: 33.3333%;">Retirement/Disqualified</td>
+					<td style="width: 33.3333%; text-align: center;"><img src="img/Flags/BlackWhite.png" alt="" /></td>
+					<td style="width: 33.3333%;">
+					<ul>
+					<li>If the driver is shown the white flag, they "Did Not Finish" and go to the lowest availible position.*</li>
+					<li>If the driver is shown the black flag, they are "Disqualified" and go to position 20, regardless of other retirements.**</li>
+					</ul>
+					</td>
+					</tr>
+					</tbody>
+				</table>
+				<p>* As an example, if someone else already retired (dropped out) and therefore ended 20th, the lowest availible position for the next drop-out will be 19th. A black flag may only be shown once.</p>
+				<h3>Section B: Restart conditions</h3>
+				<p>If the red flag is shown, the race will be suspended to clear any incidents. In this module, the way the race resumes again is determined by {ADD SOMETHING}.</p>
+				<ul>
+					
+					<li>If condition 1 is met, the race will be restarted with everyone's delta being 2.</li>
+					<li>Otherwise, If condition 2 is met, the race will be restarted with the first 10 drivers decreasing their delta by 5 seconds.</li>
+					<li>Otherwise, If condition 3 is met, the race will be restarted with one more different action to add here.</li>
+					<li>If none of the above apply, the race will be restarted without any changes.</li>
+				</ul>
+			</div>
+            <div class="page-footer relative-footer">Page 4 of 6</div>
+        </div>
+		<div class="page page-bg-01">
+            <div class="page-header">
+                <span class="page-header-doc-title">Keep Talking and Nobody Explodes Mod</span>
+                <span class="page-header-section-title">Grand Prix</span>
+            </div>
+            <div class="page-content">
+                <h3>Section C: Penalty severety</h3>
+				<p>When a driver is shown the black and white flag, they are warned for unsportsmanlike conduct. 
+				In this module, it means that the driver who is shown the flag gets a time penalty. To determine the severity of the penalty, follow the instructions below.</p>
+				<ul>
+					
+					<li>If the driver is part of team Alfa Romeo, Williams or Haas and is in position 15th to 20th, they will get a <b>3 second</b> penalty.</li>
+					<li>Otherwise, if the driver had a flag shown to them in the lap before, they will get a <b>10 second</b> penalty.</li>
+					<li>Otherwise, if the driver is in Sector 1 and 3 laps have passed, they will get a <b>5 second</b> penalty.</li>
+					<li>Otherwise, if the flag is shown in lap 1...
+						<ul>
+							<li>If the serial number contains a letter that is also in the name of the team they are in, they will get a <b>5 second</b> penalty.</li>
+							<li>Otherwise, the penalty will instead be <b>10 seconds</b>.</li>
+						</ul>
+					</li>
+					<li>Otherwise, if the serial number contains a letter that is also present in the full name of the driver, they get a <b>penalty equal to the length of their LAST name</b>.</li>
+					<li>If none of the above apply, the penalty will be <b>3 seconds</b>.</li>
+				</ul>
+            </div>
+            <div class="page-footer relative-footer">Page 1 of 6</div>
+        </div>
+		<div class="page page-bg-04">
+            <div class="page-header">
+                <span class="page-header-doc-title">Keep Talking and Nobody Explodes Mod</span>
+                <span class="page-header-section-title">Grand Prix</span>
+            </div>
+            <div class="page-content">
+                <h3>Appendix F1: Drivers of the 2020-2021 Formula 1 roster.</h3>
+				<p>In this appendix, you can find all drivers, their initials (which will be visible on the module), and the team they belong to.</p>
+				
+				
+				
+				
+				<table style="border-collapse: collapse; width: 97.017%;" border="1">
+<tbody>
+<tr>
+<td style="width: 33.3333%;">
+<h3>Team name:</h3>
+</td>
+<td style="width: 16.6667%;">
+<h3>Team color:</h3>
+</td>
+<td style="width: 28.0304%;">
+<h3>Driver name:</h3>
+</td>
+<td style="width: 21.9696%;">
+<h3>Driver initials:</h3>
+</td>
+</tr>
+<tr>
+<td style="width: 33.3333%; text-align: center;" rowspan="2">
+<p>Mercedes-AMG Petronas F1 Team</p>
+<p><img src="img/TeamLogos/Mercedes.png"></img></p>
+</td>
+<td style="width: 16.6667%; background-color: #00d2be; text-align: center;" rowspan="2">
+<p>Cyan</p>
+</td>
+<td style="width: 28.0304%; text-align: center;">
+<p>Lewis Hamilton</p>
+</td>
+<td style="width: 21.9696%; text-align: center;">
+<p>HAM</p>
+</td>
+</tr>
+<tr>
+<td style="width: 28.0304%; text-align: center;">
+<p>Valtteri Bottas</p>
+</td>
+<td style="width: 21.9696%; text-align: center;">
+<p>BOT</p>
+</td>
+</tr>
+<tr>
+<td style="width: 33.3333%; text-align: center;" rowspan="2">
+<p>Red Bull Racing Honda</p>
+<p><img src="img/TeamLogos/RedBull.png"></img></p>
+</td>
+<td style="width: 16.6667%; background-color: #000b8d; text-align: center;" rowspan="2">
+<p><span style="color: #ffffff;">Dark blue</span></p>
+</td>
+<td style="width: 28.0304%; text-align: center;">
+<p>Max Verstappen</p>
+</td>
+<td style="width: 21.9696%; text-align: center;">
+<p>VER</p>
+</td>
+</tr>
+<tr>
+<td style="width: 28.0304%; text-align: center;">
+<p>Sergio P&eacute;rez</p>
+</td>
+<td style="width: 21.9696%; text-align: center;">
+<p>PER</p>
+</td>
+</tr>
+<tr>
+<td style="width: 33.3333%; text-align: center;" rowspan="2">
+<p>McLaren F1 Team</p>
+<p><img src="img/TeamLogos/McLaren.png"></img></p>
+</td>
+<td style="width: 16.6667%; background-color: #fd8000; text-align: center;" rowspan="2">
+<p>Orange</p>
+</td>
+<td style="width: 28.0304%; text-align: center;">
+<p>Lando Norris</p>
+</td>
+<td style="width: 21.9696%; text-align: center;">
+<p>NOR</p>
+</td>
+</tr>
+<tr>
+<td style="width: 28.0304%; text-align: center;">
+<p>Daniel Ricciardo</p>
+</td>
+<td style="width: 21.9696%; text-align: center;">
+<p>RIC</p>
+</td>
+</tr>
+<tr>
+<td style="width: 33.3333%; text-align: center;" rowspan="2">
+<p>Scuderia Ferrari Mission Winnow</p>
+<p><img src="img/TeamLogos/Ferrari.png"></img></p>
+</td>
+<td style="width: 16.6667%; background-color: #df0100; text-align: center;" rowspan="2">
+<p>Red</p>
+</td>
+<td style="width: 28.0304%; text-align: center;">
+<p>Charles Leclerc</p>
+</td>
+<td style="width: 21.9696%; text-align: center;">
+<p>LEC</p>
+</td>
+</tr>
+<tr>
+<td style="width: 28.0304%; text-align: center;">
+<p>Carlos Sainz jr.</p>
+</td>
+<td style="width: 21.9696%; text-align: center;">
+<p>SAI</p>
+</td>
+</tr>
+<tr>
+<td style="width: 33.3333%; text-align: center;" rowspan="2">
+<p>Alpine F1 Team</p>
+<p><img src="img/TeamLogos/Alpine.png"></img></p>
+</td>
+<td style="width: 16.6667%; background-color: #006fba; text-align: center;" rowspan="2">
+<p>Blue</p>
+</td>
+<td style="width: 28.0304%; text-align: center;">
+<p>Fernando Alonso</p>
+</td>
+<td style="width: 21.9696%; text-align: center;">
+<p>ALO</p>
+</td>
+</tr>
+<tr>
+<td style="width: 28.0304%; text-align: center;">
+<p>Esteban Ocon</p>
+</td>
+<td style="width: 21.9696%; text-align: center;">
+<p>OCO</p>
+</td>
+</tr>
+</tbody>
+</table>
+				<p>Continues on next page...</p>
+				
+				
+				
+			</div>
+            <div class="page-footer relative-footer">Page 5 of 6</div>
+        </div>
+		<div class="page page-bg-04">
+            <div class="page-header">
+                <span class="page-header-doc-title">Keep Talking and Nobody Explodes Mod</span>
+                <span class="page-header-section-title">Grand Prix</span>
+            </div>
+            <div class="page-content">
+				
+				
+				
+				
+				<table style="border-collapse: collapse; width: 97.017%;" border="1">
+<tbody>
+<tr>
+<td style="width: 33.3333%;">
+<h3>Team name:</h3>
+</td>
+<td style="width: 16.6667%;">
+<h3>Team color:</h3>
+</td>
+<td style="width: 28.0304%;">
+<h3>Driver name:</h3>
+</td>
+<td style="width: 21.9696%;">
+<h3>Driver initials:</h3>
+</td>
+</tr>
+<tr>
+<td style="width: 33.3333%; text-align: center;" rowspan="2">
+<p>Scuderia AlphaTauri Honda</p>
+<p><img src="img/TeamLogos/AlphaTauri.png"></img></p>
+</td>
+<td style="width: 16.6667%; text-align: center;" rowspan="2">
+<p>White</p>
+</td>
+<td style="width: 28.0304%; text-align: center;">
+<p>Pierre Gasly</p>
+</td>
+<td style="width: 21.9696%; text-align: center;">
+<p>GAS</p>
+</td>
+</tr>
+<tr>
+<td style="width: 28.0304%; text-align: center;">
+<p>Yuki Tsunoda</p>
+</td>
+<td style="width: 21.9696%; text-align: center;">
+<p>TSU</p>
+</td>
+</tr>
+<tr>
+<td style="width: 33.3333%; text-align: center;" rowspan="2">
+<p>Aston Martin Cognizant F1 Team</p>
+<p><img src="img/TeamLogos/AstonMartin.png"></img></p>
+</td>
+<td style="width: 16.6667%; background-color: #00703a; text-align: center;" rowspan="2">
+<p><span style="color: #ffffff;">Dark green</span></p>
+</td>
+<td style="width: 28.0304%; text-align: center;">
+<p>Sebastian Vettel</p>
+</td>
+<td style="width: 21.9696%; text-align: center;">
+<p>VET</p>
+</td>
+</tr>
+<tr>
+<td style="width: 28.0304%; text-align: center;">
+<p>Lance Stroll</p>
+</td>
+<td style="width: 21.9696%; text-align: center;">
+<p>STR</p>
+</td>
+</tr>
+<tr>
+<td style="width: 33.3333%; text-align: center;" rowspan="2">
+<p>Williams Racing</p>
+<p><img src="img/TeamLogos/Williams.png"></img></p>
+</td>
+<td style="width: 16.6667%; background-color: #00b5ff; text-align: center;" rowspan="2">
+<p>Light blue</p>
+</td>
+<td style="width: 28.0304%; text-align: center;">
+<p>George Russell</p>
+</td>
+<td style="width: 21.9696%; text-align: center;">
+<p>RUS</p>
+</td>
+</tr>
+<tr>
+<td style="width: 28.0304%; text-align: center;">
+<p>Nicolas Latifi</p>
+</td>
+<td style="width: 21.9696%; text-align: center;">
+<p>LAT</p>
+</td>
+</tr>
+<tr>
+<td style="width: 33.3333%; text-align: center;" rowspan="2">
+<p>Alfa Romeo Racing ORLEN</p>
+<p><img src="img/TeamLogos/AlfaRomeo.png"></img></p>
+</td>
+<td style="width: 16.6667%; background-color: #960000; text-align: center;" rowspan="2">
+<p><span style="color: #ffffff;">Dark red</span></p>
+</td>
+<td style="width: 28.0304%; text-align: center;">
+<p>Kimi R&auml;ikk&ouml;nen</p>
+</td>
+<td style="width: 21.9696%; text-align: center;">
+<p>RAI</p>
+</td>
+</tr>
+<tr>
+<td style="width: 28.0304%; text-align: center;">
+<p>Antonio Giovinazzi</p>
+</td>
+<td style="width: 21.9696%; text-align: center;">
+<p>GIO</p>
+</td>
+</tr>
+<tr>
+<td style="width: 33.3333%; text-align: center;" rowspan="2">
+<p>Uralkali Haas F1 Team</p>
+<p><img src="img/TeamLogos/Haas.png"></img></p>
+</td>
+<td style="width: 16.6667%; background-color: #787878; text-align: center;" rowspan="2">
+<p><span style="color: #ffffff;">Grey</span></p>
+</td>
+<td style="width: 28.0304%; text-align: center;">
+<p>Mick Schumacher</p>
+</td>
+<td style="width: 21.9696%; text-align: center;">
+<p>MSC</p>
+</td>
+</tr>
+<tr>
+<td style="width: 28.0304%; text-align: center;">
+<p>Nikita Mazepin</p>
+</td>
+<td style="width: 21.9696%; text-align: center;">
+<p>MAZ</p>
+</td>
+</tr>
+</tbody>
+</table>
+
+			</div>
+            <div class="page-footer relative-footer">Page 6 of 6</div>
+        </div>
+    </div>
+</body>
+</html>
