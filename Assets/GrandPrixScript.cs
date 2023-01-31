@@ -2304,7 +2304,7 @@ public class GrandPrixScript : MonoBehaviour
 	}
 
 	//Twitch Plays
-	private readonly string TwitchHelpMessage = "TEMPORARY PLACEHOLDER TWITCH HELP MESSAGE.";
+	private readonly string TwitchHelpMessage = "Type !{0} swap [driver] [driver] to swap the positions of the two drivers. You can either use their acronym (HAM) or their position (#1, must include the hashtag). Type !{0} submit to submit the results. If it's incorrect, type !{0} show [#] to show the flag info for lap #, then type !{0} continue to return to the final lap submission.";
 	IEnumerator ProcessTwitchCommand(string Command)
 	{
 		Command = Command.ToLowerInvariant().Trim();
