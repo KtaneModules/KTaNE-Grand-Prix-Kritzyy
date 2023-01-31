@@ -61,31 +61,32 @@ public class GrandPrixScript : MonoBehaviour
 		"STR"
 	};
 
-	List<string> ListOfAllDriverNames = new List<string>()
-	{
-		"Hamilton",
-		"Bottas",
-		"Verstappen",
-		"Perez",
-		"Norris",
-		"Ricciardo",
-		"Russell",
-		"Latifi",
-		"Sainz",
-		"Leclerc",
-		"Mazepin",
-		"Schumacher",
-		"Alonso",
-		"Ocon",
-		"Raikkonen",
-		"Giovinazzi",
-		"Gasly",
-		"Tsunoda",
-		"Vettel",
-		"Stroll"
-	};
+	List<string> ListOfAllDriverLastNames = new List<string>()
+    {
+        "Hamilton",
+        "Bottas",
+        "Verstappen",
+        "Perez",
+        "Norris",
+        "Ricciardo",
+        "Russell",
+        "Latifi",
+        "Sainz",
+        "Leclerc",
+        "Mazepin",
+        "Schumacher",
+        "Alonso",
+        "Ocon",
+        "Raikkonen",
+        "Giovinazzi",
+        "Gasly",
+        "Tsunoda",
+        "Vettel",
+        "Stroll"
+    };
 
-	List<string> Team_MERCEDES = new List<string>()
+
+    List<string> Team_MERCEDES = new List<string>()
 	{
 		"HAM", "BOT"
 	};
@@ -145,7 +146,7 @@ public class GrandPrixScript : MonoBehaviour
 	string SectorInfoDriver;
 	string SelectedDriver_1, SelectedDriver_2;
 	public string[] CurrentGridDrivers = new string[20];
-	public string[] CurrentGridDrivers_FullName = new string[20];
+	public string[] CurrentGridDrivers_FullLastName = new string[20];
 	public string[] CurrentGridTeams = new string[20];
 	public string[] StartingGridDrivers = new string[20];
 	public string[] StartingGridTeams = new string[20];
@@ -219,9 +220,9 @@ public class GrandPrixScript : MonoBehaviour
 
 			int DriverGenerator = Random.Range(0, ListOfAllDriverAcros.Count);
 			CurrentGridDrivers[T] = ListOfAllDriverAcros[DriverGenerator];
-			CurrentGridDrivers_FullName[T] = ListOfAllDriverNames[DriverGenerator];
+			CurrentGridDrivers_FullLastName[T] = ListOfAllDriverLastNames[DriverGenerator];
 			ListOfAllDriverAcros.Remove(CurrentGridDrivers[T]);
-			ListOfAllDriverNames.Remove(CurrentGridDrivers_FullName[T]);
+			ListOfAllDriverLastNames.Remove(CurrentGridDrivers_FullLastName[T]);
 			AllDriverNameTextMeshes[T].text = CurrentGridDrivers[T];
 		}
 
@@ -460,16 +461,18 @@ public class GrandPrixScript : MonoBehaviour
 						{
 							case 0: //Will happen
                                 {
+									// Decide what type of flag. 1 = black, 0 = white
 									Eliminations++;
-									if (!BlackFlagged) //Only one black flag
-									{
-										BlackOrWhite = Random.Range(0, 2);
-									}
-									else
-									{
-										BlackOrWhite = 0;
-									}
-									switch (FlagGenerator)
+                                    if (BlackFlagged) // ... Unless if a black flag was already called before. There can only be one black flag
+                                    {
+                                        BlackOrWhite = 0;
+                                    }
+                                    else
+                                    {
+                                        BlackOrWhite = Random.Range(0, 2);
+                                    }
+
+                                    switch (BlackOrWhite)
 									{
 										default: //White flag
 											{
@@ -572,8 +575,7 @@ public class GrandPrixScript : MonoBehaviour
 						}
 						else
 						{
-							//int DropoutChance = Random.Range(0, 5);
-							int DropoutChance = Random.Range(0, 1); //RNG MANIPULATION
+							int DropoutChance = Random.Range(0, 5);
 							switch (DropoutChance)
 							{
 								default: //No dropouts
@@ -778,7 +780,7 @@ public class GrandPrixScript : MonoBehaviour
 							}
 						}
 					}
-					else if (LapCount == BombInfo.GetBatteryCount())
+					else if (LapCount >= BombInfo.GetBatteryCount())
                     {
 						for (int i = 0; i < 10; i++)
 						{
@@ -819,55 +821,70 @@ public class GrandPrixScript : MonoBehaviour
 						}
 						else
 						{
-							//Stop checking. Found the position of the dropout.
+							//Stop checking. Found the position of the penalty receiver.
 							break;
 						}
 					}
 
-					List<string> PenaltyTeamNames = new List<string>()
+                    List<string> PenaltyTeamNames = new List<string>()
 					{
 						"Alfa Romeo",
 						"Williams",
 						"Haas"
 					};
 
-					if (PenaltyTeamNames.Contains(CurrentGridDrivers[Place]) && Place >= 15)
+					// Gain info on serial letters and receiver of the penalty, for more clear reading
+					string SerialNumberLetters = "";
+					foreach (char letter in BombInfo.GetSerialNumberLetters())
 					{
-						LeaderDifference[Place] += 3;
+						SerialNumberLetters += letter;
+					}
+                    string Receiver = CurrentGridDrivers_FullLastName[Place];
+                    Debug.LogFormat("(Grand Prix #{0}): (SYSTEM) Penalty receiver's full last name: {1}", ModuleID, Receiver);
+
+                    if (PenaltyTeamNames.Contains(CurrentGridDrivers[Place]) && Place >= 15)
+					{
+                        Debug.LogFormat("(Grand Prix #{0}): (SYSTEM) Receiver is part of Williams, Haas or Alfa, and is lower than 14th", ModuleID);
+                        LeaderDifference[Place] += 3;
 						PerformedAction = SectorInfoDriver + " has received a 3 second penalty.";
 					}
 					else if (CurrentGridDrivers[Place] == History_DriverInfo[CurrentLap - 1])
 					{
-						LeaderDifference[Place] += 10;
+                        Debug.LogFormat("(Grand Prix #{0}): (SYSTEM) Receiver was shwon a flag prior in the previous lap", ModuleID);
+                        LeaderDifference[Place] += 10;
 						PerformedAction = SectorInfoDriver + " has received a 10 second penalty.";
 					}
 					else if (DriverSectorNumbers[Place] == 1 && CurrentLap >= 3)
 					{
-						LeaderDifference[Place] += 5;
+                        Debug.LogFormat("(Grand Prix #{0}): (SYSTEM) receiver is in S1 on lap {1}", ModuleID, LapCount);
+                        LeaderDifference[Place] += 5;
 						PerformedAction = SectorInfoDriver + " has received a 5 second penalty.";
 					}
-					else if (CurrentLap == 1 && BombInfo.GetSerialNumberLetters().Any(CurrentGridTeams[Place].Contains))
+					else if (CurrentLap == 1 && SerialNumberLetters.Any(CurrentGridTeams[Place].Contains))
 					{
-						LeaderDifference[Place] += 5;
+                        Debug.LogFormat("(Grand Prix #{0}): (SYSTEM) Lap 1, and serial matches team name", ModuleID);
+                        LeaderDifference[Place] += 5;
 						PerformedAction = SectorInfoDriver + " has received a 5 second penalty.";
 					}
                     else if (CurrentLap == 1)
                     {
+                        Debug.LogFormat("(Grand Prix #{0}): (SYSTEM) Lap 1, but no match", ModuleID);
                         LeaderDifference[Place] += 10;
 						PerformedAction = SectorInfoDriver + " has received a 10 second penalty.";
 					}
-					else if (BombInfo.GetSerialNumberLetters().Any(CurrentGridDrivers[Place].Contains))
-					{
-						LeaderDifference[Place] += CurrentGridDrivers_FullName[Place].Length;
-						PerformedAction = SectorInfoDriver + " has received a time penalty of " + CurrentGridDrivers_FullName[Place].Length + ".";
-					}
-					else
+                    else if (SerialNumberLetters.ToLower().Any(Receiver.ToLower().Contains))
                     {
-						LeaderDifference[Place] += 3;
-						PerformedAction = SectorInfoDriver + " has received a 3 second penalty.";
-					}
-
-					break;
+                        Debug.LogFormat("(Grand Prix #{0}): (SYSTEM) Serial contains letter of full last name", ModuleID);
+                        LeaderDifference[Place] += Receiver.Length;
+                        PerformedAction = SectorInfoDriver + " has received a time penalty of " + Receiver.Length + ".";
+                    }
+                    else
+                    {
+                        Debug.LogFormat("(Grand Prix #{0}): (SYSTEM) NONE APPLY", ModuleID);
+                        LeaderDifference[Place] += 3;
+                        PerformedAction = SectorInfoDriver + " has received a 3 second penalty.";
+                    }
+                    break;
 				}
 			case "White":
 				{
