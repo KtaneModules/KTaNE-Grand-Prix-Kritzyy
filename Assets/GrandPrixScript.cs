@@ -670,7 +670,7 @@ public class GrandPrixScript : MonoBehaviour
 						}
 						CurrentDriver_Sector++;
                     }
-					PerformedAction = "Drivers in sector " + CurrentSectorNumber + "have their delta increased by 1";
+					PerformedAction = "Drivers in sector " + CurrentSectorNumber + " have their delta increased by 1";
 					break;
                 }
 			case "YellowSC":
@@ -723,17 +723,17 @@ public class GrandPrixScript : MonoBehaviour
 					int index = StartingGridDrivers.IndexOf(SectorInfoDriver);
 					if (index <= 3 && DriverSectorNumbers[index] == 1)
                     {
-						PerformedAction = "The associated driver started top 3 and is now in sector 1. His delta decreases by 1 second.";
+						PerformedAction = "The associated driver started top 3 and is now in sector 1. His delta increases by 1 second.";
 						LeaderDifference[index] -= 0.5f;
 					}
 					else if (CurrentLap > 5)
                     {
-						PerformedAction = "5 laps have passed, so the associated driver's delta decreases by 1 second.";
+						PerformedAction = "5 laps have passed, so the associated driver's delta increases by 1 second.";
 						LeaderDifference[index] += 1;
 					}
 					else
                     {
-						PerformedAction = "Blue flags are out, so the associated driver's delta decreases by 0,75 seconds.";
+						PerformedAction = "Blue flags are out, so the associated driver's delta increases by 0.75 seconds.";
 						LeaderDifference[index] += 0.75f;
 					}
 					break;
@@ -742,7 +742,7 @@ public class GrandPrixScript : MonoBehaviour
 				{
 					if (Eliminated != "NoDrop")
 					{
-						PerformedAction = Eliminated + " is out of the race.";
+						PerformedAction = Eliminated + " is out of the race. ";
 						int Difference = 0;
 						for (int i = 0; i < LeaderDifference.Length; i++)
 						{
@@ -771,6 +771,8 @@ public class GrandPrixScript : MonoBehaviour
 					int DifferenceToAssign = 0;
 					if (BombInfo.IsIndicatorOn(Indicator.BOB))
                     {
+						// Logging
+						PerformedAction += "Lit BOB is present, so deltas are reset to 2";
 						for (int i = 0; i < LeaderDifference.Length; i++)
 						{
 							if (LeaderDifference[i] <= 100)
@@ -782,18 +784,23 @@ public class GrandPrixScript : MonoBehaviour
 					}
 					else if (LapCount >= BombInfo.GetBatteryCount())
                     {
-						for (int i = 0; i < 10; i++)
+						PerformedAction += "Lap count is equal or greater than battery count, so deltas are decreased by 5 for first 10 drivers";
+						for (int i = 9; i >= 0; i--)
 						{
 							if (LeaderDifference[i] <= 100)
 							{
+								// Since the times of all the drivers are being lowered,
+								// we also have to keep the decrease from each prior driver in mind
+								// while decreasing the current driver.
 								DifferenceToAssign += 5;
-								LeaderDifference[i] = DifferenceToAssign;
+								LeaderDifference[i] += DifferenceToAssign;
 							}
 						}
 					}
 					else if (BombInfo.GetSerialNumberNumbers().First() == CurrentSectorNumber || BombInfo.GetSerialNumberNumbers().Last() == CurrentSectorNumber)
 					{
-						bool Even = false;
+                        PerformedAction += "Serial Number matches sector, so un even driver decreases delta by 2";
+                        bool Even = false;
 						for (int i = 0; i < LeaderDifference.Length; i++)
 						{
 							if (!Even)
@@ -807,6 +814,10 @@ public class GrandPrixScript : MonoBehaviour
 							Even = !Even;
 						}
 					}
+					else
+					{
+                        PerformedAction += "None apply. Restarting as usual";
+                    }
 
 					break;
 				}
@@ -850,7 +861,7 @@ public class GrandPrixScript : MonoBehaviour
 					}
 					else if (CurrentGridDrivers[Place] == History_DriverInfo[CurrentLap - 1])
 					{
-                        Debug.LogFormat("(Grand Prix #{0}): (SYSTEM) Receiver was shwon a flag prior in the previous lap", ModuleID);
+                        Debug.LogFormat("(Grand Prix #{0}): (SYSTEM) Receiver was shown a flag prior in the previous lap", ModuleID);
                         LeaderDifference[Place] += 10;
 						PerformedAction = SectorInfoDriver + " has received a 10 second penalty.";
 					}
@@ -1046,7 +1057,7 @@ public class GrandPrixScript : MonoBehaviour
 
 		SectorInfo_DriverTextMesh.gameObject.SetActive(false);
 		DriverSectorTextMesh.gameObject.SetActive(false);
-		SectorInfo_DriverTextMesh.gameObject.SetActive(false);
+		DeltasGameObject.gameObject.SetActive(false);
 
 		FlagRender.gameObject.SetActive(false);
 		SubmitFlag.gameObject.transform.localPosition = new Vector3(0, -0.055f, -0.01f);
@@ -2103,6 +2114,10 @@ public class GrandPrixScript : MonoBehaviour
                 {
 					CurrentLap--;
                 }
+				else if (CurrentLap < 1)
+				{
+					CurrentLap++;
+				}
 				LapCountTextMesh.text = "Lap " + CurrentLap + "/" + LapCount;
 				FlagDescriptionBox.material.color = Color.red;
 
