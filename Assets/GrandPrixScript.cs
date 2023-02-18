@@ -176,7 +176,7 @@ public class GrandPrixScript : MonoBehaviour
 		ModuleID = moduleIdCounter++;
 	}
 
-	void Start ()
+	void Start()
 	{
 		Sound.PlaySoundAtTransform("StartingLights", transform);
 
@@ -202,7 +202,7 @@ public class GrandPrixScript : MonoBehaviour
 				{
 					DeltaString += "+" + DeltaGenerator + ".000\n";
 				}
-				if (DeltaGenerator.ToString().Length == 3)
+				else if (DeltaGenerator.ToString().Length == 3)
 				{
 					DeltaString += "+" + DeltaGenerator + "00\n";
 				}
@@ -327,6 +327,7 @@ public class GrandPrixScript : MonoBehaviour
 			{
 				ThisModule.HandlePass();
 				Debug.LogFormat("[Grand Prix #{0}]: (Initial) There are not enough valid modules, autosolving...", ModuleID);
+				return;
 			}
 			//Otherwise, the minimum is half the amount of normal modules
 			else
@@ -497,7 +498,7 @@ public class GrandPrixScript : MonoBehaviour
 							default: //Will NOT happen
                                 {
 									GenerateLapInfo();
-									break;
+									return;
                                 }
                         }
 						break;
@@ -720,10 +721,11 @@ public class GrandPrixScript : MonoBehaviour
 				}
 			case "Blue":
 				{
-					int index = StartingGridDrivers.IndexOf(SectorInfoDriver);
-					if (index <= 3 && DriverSectorNumbers[index] == 1)
+					int index = StartingGridDrivers.IndexOf(SectorInfoDriver) + 1; // Plus 1 or it will take index 0
+					Debug.LogFormat("(Grand Prix #{0}): (SYSTEM) Index of blue flagged driver: {1}", ModuleID, index);
+                    if (index <= 3 && DriverSectorNumbers[index] == 1)
                     {
-						PerformedAction = "The associated driver started top 3 and is now in sector 1. His delta increases by 1 second.";
+						PerformedAction = "The associated driver started top 3 and is now in sector 1. His delta decreases by 1 second.";
 						LeaderDifference[index] -= 0.5f;
 					}
 					else if (CurrentLap > 5)
@@ -859,7 +861,7 @@ public class GrandPrixScript : MonoBehaviour
                         LeaderDifference[Place] += 3;
 						PerformedAction = SectorInfoDriver + " has received a 3 second penalty.";
 					}
-					else if (CurrentGridDrivers[Place] == History_DriverInfo[CurrentLap - 1])
+					else if (History_DriverInfo[CurrentLap - 1].Contains(CurrentGridDrivers[Place])) // Since History_DriverInfo adds a '-' at the front, they wouldn't match exact. Using this to circumvent that
 					{
                         Debug.LogFormat("(Grand Prix #{0}): (SYSTEM) Receiver was shown a flag prior in the previous lap", ModuleID);
                         LeaderDifference[Place] += 10;
@@ -1081,10 +1083,10 @@ public class GrandPrixScript : MonoBehaviour
 			if (BombInfo.GetSolvedModuleNames().Count() != CurrentSolveCount)
             {
 				CurrentSolveCount = BombInfo.GetSolvedModuleNames().Count();
-				CurrentLap++;
 				if (!FinalLap)
                 {
-					if (CurrentLap == LapCount)
+                    CurrentLap++;
+                    if (CurrentLap == LapCount)
 					{
 						HandleFinalLap();
 					}
