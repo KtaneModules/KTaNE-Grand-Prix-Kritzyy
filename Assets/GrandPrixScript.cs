@@ -256,52 +256,52 @@ public class GrandPrixScript : MonoBehaviour
         {
 			if (Team_MERCEDES.Any(Driver.Contains))
             {
-				CurrentGridTeams[CurrentDriver_Driver] = "Mercedes";
+				CurrentGridTeams[CurrentDriver_Driver] = "Mercedes-AMG Petronas F1 Team";
 				TeamRenders[CurrentDriver_Driver].material.mainTexture = TeamTextures[0];
             }
 			else if (Team_RB.Any(Driver.Contains))
 			{
-				CurrentGridTeams[CurrentDriver_Driver] = "Red Bull";
+				CurrentGridTeams[CurrentDriver_Driver] = "Red Bull Racing Honda";
 				TeamRenders[CurrentDriver_Driver].material.mainTexture = TeamTextures[1];
 			}
 			else if (Team_MCLAREN.Any(Driver.Contains))
 			{
-				CurrentGridTeams[CurrentDriver_Driver] = "McLaren";
+				CurrentGridTeams[CurrentDriver_Driver] = "McLaren F1 Team";
 				TeamRenders[CurrentDriver_Driver].material.mainTexture = TeamTextures[2];
 			}
 			else if (Team_WILLIAMS.Any(Driver.Contains))
 			{
-				CurrentGridTeams[CurrentDriver_Driver] = "Williams";
+				CurrentGridTeams[CurrentDriver_Driver] = "Williams Racing";
 				TeamRenders[CurrentDriver_Driver].material.mainTexture = TeamTextures[3];
 			}
 			else if (Team_FERRARI.Any(Driver.Contains))
 			{
-				CurrentGridTeams[CurrentDriver_Driver] = "Ferrari";
+				CurrentGridTeams[CurrentDriver_Driver] = "Scuderia Ferrari Mission Winnow";
 				TeamRenders[CurrentDriver_Driver].material.mainTexture = TeamTextures[4];
 			}
 			else if (Team_HAAS.Any(Driver.Contains))
 			{
-				CurrentGridTeams[CurrentDriver_Driver] = "Haas";
+				CurrentGridTeams[CurrentDriver_Driver] = "Uralkali Haas F1 Team";
 				TeamRenders[CurrentDriver_Driver].material.mainTexture = TeamTextures[5];
 			}
 			else if (Team_ALPINE.Any(Driver.Contains))
 			{
-				CurrentGridTeams[CurrentDriver_Driver] = "Alpine";
+				CurrentGridTeams[CurrentDriver_Driver] = "Alpine F1 Team";
 				TeamRenders[CurrentDriver_Driver].material.mainTexture = TeamTextures[6];
 			}
 			else if (Team_ROMEO.Any(Driver.Contains))
 			{
-				CurrentGridTeams[CurrentDriver_Driver] = "Alfa Romeo";
+				CurrentGridTeams[CurrentDriver_Driver] = "Alfa Romeo Racing ORLEN";
 				TeamRenders[CurrentDriver_Driver].material.mainTexture = TeamTextures[7];
 			}
 			else if (Team_TAURI.Any(Driver.Contains))
 			{
-				CurrentGridTeams[CurrentDriver_Driver] = "Alpha Tauri";
+				CurrentGridTeams[CurrentDriver_Driver] = "Scuderia AlphaTauri Honda";
 				TeamRenders[CurrentDriver_Driver].material.mainTexture = TeamTextures[8];
 			}
 			else if (Team_ASTON.Any(Driver.Contains))
 			{
-				CurrentGridTeams[CurrentDriver_Driver] = "Aston Martin";
+				CurrentGridTeams[CurrentDriver_Driver] = "Aston Martin Cognizant F1 Team";
 				TeamRenders[CurrentDriver_Driver].material.mainTexture = TeamTextures[9];
 			}
 			CurrentDriver_Driver++;
@@ -394,6 +394,7 @@ public class GrandPrixScript : MonoBehaviour
 		{
 			DeltasGameObject.SetActive(false);
 
+			regenFlag:
 			//To avoid too many drop-outs, limit it to two
 			if (Eliminations > 2)
             {
@@ -497,8 +498,7 @@ public class GrandPrixScript : MonoBehaviour
                                 }
 							default: //Will NOT happen
                                 {
-									GenerateLapInfo();
-									return;
+									goto regenFlag;
                                 }
                         }
 						break;
@@ -671,7 +671,7 @@ public class GrandPrixScript : MonoBehaviour
 						}
 						CurrentDriver_Sector++;
                     }
-					PerformedAction = "Drivers in sector " + CurrentSectorNumber + " have their delta increased by 1";
+					PerformedAction = "Drivers in sector " + CurrentSectorNumber + " have their delta increased by 1.";
 					break;
                 }
 			case "YellowSC":
@@ -723,20 +723,20 @@ public class GrandPrixScript : MonoBehaviour
 				{
 					int index = StartingGridDrivers.IndexOf(SectorInfoDriver) + 1; // Plus 1 or it will take index 0
 					Debug.LogFormat("(Grand Prix #{0}): (SYSTEM) Index of blue flagged driver: {1}", ModuleID, index);
-                    if (index <= 3 && DriverSectorNumbers[index] == 1)
+                    if (index <= 3 && DriverSectorNumbers[index - 1] == 1)
                     {
-						PerformedAction = "The associated driver started top 3 and is now in sector 1. His delta decreases by 1 second.";
-						LeaderDifference[index] -= 0.5f;
+						PerformedAction = "The associated driver started top 3 and is now in sector 1. His delta decreases by 0.5 seconds.";
+						LeaderDifference[index - 1] -= 0.5f;
 					}
 					else if (CurrentLap > 5)
                     {
 						PerformedAction = "5 laps have passed, so the associated driver's delta increases by 1 second.";
-						LeaderDifference[index] += 1;
+						LeaderDifference[index - 1] += 1;
 					}
 					else
                     {
 						PerformedAction = "Blue flags are out, so the associated driver's delta increases by 0.75 seconds.";
-						LeaderDifference[index] += 0.75f;
+						LeaderDifference[index - 1] += 0.75f;
 					}
 					break;
 				}
@@ -744,16 +744,7 @@ public class GrandPrixScript : MonoBehaviour
 				{
 					if (Eliminated != "NoDrop")
 					{
-						PerformedAction = Eliminated + " is out of the race. ";
-						int Difference = 0;
-						for (int i = 0; i < LeaderDifference.Length; i++)
-						{
-							if (LeaderDifference[i] <= 89999999)
-							{
-								Difference++;
-								LeaderDifference[i] = Difference;
-							}
-						}
+						PerformedAction = Eliminated + " is out of the race.";
 						int Place = 0;
 						foreach (string Driver in CurrentGridDrivers)
 						{
@@ -767,14 +758,22 @@ public class GrandPrixScript : MonoBehaviour
 								break;
 							}
 						}
-						LeaderDifference[Place] = 90000000; //9000000X are dropouts.
+						//Increase every driver's elimination spot by 1 first.
+						for (int i = 0; i < LeaderDifference.Length; i++)
+						{
+							if (LeaderDifference[i] > 100 && LeaderDifference[i] != 121)
+							{
+								LeaderDifference[i]++;
+							}
+						}
+						LeaderDifference[Place] = 101; //101 is the first elimination spot. Anything greater is the rest of the elimination spots.
 					}
 
 					int DifferenceToAssign = 0;
 					if (BombInfo.IsIndicatorOn(Indicator.BOB))
                     {
 						// Logging
-						PerformedAction += "Lit BOB is present, so deltas are reset to 2";
+						PerformedAction += "Lit BOB is present, so deltas are reset to 2.";
 						for (int i = 0; i < LeaderDifference.Length; i++)
 						{
 							if (LeaderDifference[i] <= 100)
@@ -786,7 +785,7 @@ public class GrandPrixScript : MonoBehaviour
 					}
 					else if (LapCount >= BombInfo.GetBatteryCount())
                     {
-						PerformedAction += "Lap count is equal or greater than battery count, so deltas are decreased by 5 for first 10 drivers";
+						PerformedAction += "Lap count is equal or greater than battery count, so deltas are decreased by 5 for first 10 drivers.";
 						for (int i = 9; i >= 0; i--)
 						{
 							if (LeaderDifference[i] <= 100)
@@ -801,7 +800,7 @@ public class GrandPrixScript : MonoBehaviour
 					}
 					else if (BombInfo.GetSerialNumberNumbers().First() == CurrentSectorNumber || BombInfo.GetSerialNumberNumbers().Last() == CurrentSectorNumber)
 					{
-                        PerformedAction += "Serial Number matches sector, so un even driver decreases delta by 2";
+                        PerformedAction += "Serial Number matches sector, so uneven driver decreases delta by 2.";
                         bool Even = false;
 						for (int i = 0; i < LeaderDifference.Length; i++)
 						{
@@ -818,7 +817,7 @@ public class GrandPrixScript : MonoBehaviour
 					}
 					else
 					{
-                        PerformedAction += "None apply. Restarting as usual";
+                        PerformedAction += "None apply. Restarting as usual.";
                     }
 
 					break;
@@ -841,9 +840,9 @@ public class GrandPrixScript : MonoBehaviour
 
                     List<string> PenaltyTeamNames = new List<string>()
 					{
-						"Alfa Romeo",
-						"Williams",
-						"Haas"
+						"Alfa Romeo Racing ORLEN",
+						"Williams Racing",
+						"Uralkali Haas F1 Team"
 					};
 
 					// Gain info on serial letters and receiver of the penalty, for more clear reading
@@ -855,25 +854,25 @@ public class GrandPrixScript : MonoBehaviour
                     string Receiver = CurrentGridDrivers_FullLastName[Place];
                     Debug.LogFormat("(Grand Prix #{0}): (SYSTEM) Penalty receiver's full last name: {1}", ModuleID, Receiver);
 
-                    if (PenaltyTeamNames.Contains(CurrentGridDrivers[Place]) && Place >= 15)
+                    if (PenaltyTeamNames.Contains(CurrentGridTeams[Place]) && Place >= 14)
 					{
-                        Debug.LogFormat("(Grand Prix #{0}): (SYSTEM) Receiver is part of Williams, Haas or Alfa, and is lower than 14th", ModuleID);
+                        Debug.LogFormat("(Grand Prix #{0}): (SYSTEM) Receiver is part of Williams, Haas or Alfa, and is higher than 14th", ModuleID);
                         LeaderDifference[Place] += 3;
 						PerformedAction = SectorInfoDriver + " has received a 3 second penalty.";
 					}
 					else if (History_DriverInfo[CurrentLap - 1].Contains(CurrentGridDrivers[Place])) // Since History_DriverInfo adds a '-' at the front, they wouldn't match exact. Using this to circumvent that
 					{
-                        Debug.LogFormat("(Grand Prix #{0}): (SYSTEM) Receiver was shown a flag prior in the previous lap", ModuleID);
+                        Debug.LogFormat("(Grand Prix #{0}): (SYSTEM) Receiver was shown a flag in the previous lap", ModuleID);
                         LeaderDifference[Place] += 10;
 						PerformedAction = SectorInfoDriver + " has received a 10 second penalty.";
 					}
-					else if (DriverSectorNumbers[Place] == 1 && CurrentLap >= 3)
+					else if (DriverSectorNumbers[Place] == 1 && CurrentLap > 3)
 					{
-                        Debug.LogFormat("(Grand Prix #{0}): (SYSTEM) receiver is in S1 on lap {1}", ModuleID, LapCount);
+                        Debug.LogFormat("(Grand Prix #{0}): (SYSTEM) Receiver is in S1 on lap {1}", ModuleID, CurrentLap);
                         LeaderDifference[Place] += 5;
 						PerformedAction = SectorInfoDriver + " has received a 5 second penalty.";
 					}
-					else if (CurrentLap == 1 && SerialNumberLetters.Any(CurrentGridTeams[Place].Contains))
+					else if (CurrentLap == 1 && SerialNumberLetters.Any(CurrentGridTeams[Place].ToUpper().Contains))
 					{
                         Debug.LogFormat("(Grand Prix #{0}): (SYSTEM) Lap 1, and serial matches team name", ModuleID);
                         LeaderDifference[Place] += 5;
@@ -914,9 +913,16 @@ public class GrandPrixScript : MonoBehaviour
 							//Stop checking. Found the position of the dropout.
 							break;
 						}
-						Eliminations++;
 					}
-					LeaderDifference[Place] = 100 + Eliminations; //10X is for dropouts.
+					//Increase every driver's elimination spot by 1 first.
+					for (int i = 0; i < LeaderDifference.Length; i++)
+					{
+						if (LeaderDifference[i] > 100 && LeaderDifference[i] != 121)
+						{
+							LeaderDifference[i]++;
+						}
+					}
+					LeaderDifference[Place] = 101; //101 is the first elimination spot. Anything greater is the rest of the elimination spots.
 					break;
 				}
 			case "Black":
@@ -934,58 +940,26 @@ public class GrandPrixScript : MonoBehaviour
 							//Stop checking. Found the position of the dropout.
 							break;
 						}
-						Eliminations++;
 					}
-					LeaderDifference[Place] = 121; //121 is the spot for the one eliminated.
+					LeaderDifference[Place] = 121; //121 is the spot for the one disqualified.
 					break;
 				}
 		}
 
-		while (LeaderDifference[0] > 0)
-        {
-			LeaderDifference[0] -= 1;
-			LeaderDifference[1] -= 1;
-			LeaderDifference[2] -= 1;
-			LeaderDifference[3] -= 1;
-			LeaderDifference[4] -= 1;
-			LeaderDifference[5] -= 1;
-			LeaderDifference[6] -= 1;
-			LeaderDifference[7] -= 1;
-			LeaderDifference[8] -= 1;
-			LeaderDifference[9] -= 1;
-			LeaderDifference[10] -= 1;
-			LeaderDifference[11] -= 1;
-			LeaderDifference[12] -= 1;
-			LeaderDifference[13] -= 1;
-			LeaderDifference[14] -= 1;
-			LeaderDifference[15] -= 1;
-			LeaderDifference[16] -= 1;
-			LeaderDifference[17] -= 1;
-			LeaderDifference[18] -= 1;
-			LeaderDifference[19] -= 1;
-		}
-		while (LeaderDifference[0] < 0)
+		float lowest = LeaderDifference.Min();
+		if (lowest < 0)
 		{
-			LeaderDifference[0] += 1;
-			LeaderDifference[1] += 1;
-			LeaderDifference[2] += 1;
-			LeaderDifference[3] += 1;
-			LeaderDifference[4] += 1;
-			LeaderDifference[5] += 1;
-			LeaderDifference[6] += 1;
-			LeaderDifference[7] += 1;
-			LeaderDifference[8] += 1;
-			LeaderDifference[9] += 1;
-			LeaderDifference[10] += 1;
-			LeaderDifference[11] += 1;
-			LeaderDifference[12] += 1;
-			LeaderDifference[13] += 1;
-			LeaderDifference[14] += 1;
-			LeaderDifference[15] += 1;
-			LeaderDifference[16] += 1;
-			LeaderDifference[17] += 1;
-			LeaderDifference[18] += 1;
-			LeaderDifference[19] += 1;
+			for (int i = 0; i < LeaderDifference.Length; i++)
+			{
+				LeaderDifference[i] += lowest;
+			}
+		}
+		else if (lowest > 0)
+		{
+			for (int i = 0; i < LeaderDifference.Length; i++)
+			{
+				LeaderDifference[i] -= lowest;
+			}
 		}
 
 		Logging(FlagType, LOG_DriversInCurrentSector.ToArray(), PerformedAction);
@@ -1073,7 +1047,7 @@ public class GrandPrixScript : MonoBehaviour
 			LeaderDifference[LowestValue] = 100000000;
 		}
 
-		Debug.LogFormat("[Grand Prix #{0}]: (Final lap) The exptected result is {1}", ModuleID, string.Join(", ", EndResultsList));
+		Debug.LogFormat("[Grand Prix #{0}]: (Final lap) The expected result is {1}", ModuleID, string.Join(", ", EndResultsList));
 	}
 
 	IEnumerator CheckForSolves()
@@ -2030,52 +2004,52 @@ public class GrandPrixScript : MonoBehaviour
 		{
 			if (Team_MERCEDES.Any(Driver.Contains))
 			{
-				CurrentGridTeams[CurrentDriver_Driver] = "Mercedes";
+				CurrentGridTeams[CurrentDriver_Driver] = "Mercedes-AMG Petronas F1 Team";
 				TeamRenders[CurrentDriver_Driver].material.mainTexture = TeamTextures[0];
 			}
 			else if (Team_RB.Any(Driver.Contains))
 			{
-				CurrentGridTeams[CurrentDriver_Driver] = "Red Bull";
+				CurrentGridTeams[CurrentDriver_Driver] = "Red Bull Racing Honda";
 				TeamRenders[CurrentDriver_Driver].material.mainTexture = TeamTextures[1];
 			}
 			else if (Team_MCLAREN.Any(Driver.Contains))
 			{
-				CurrentGridTeams[CurrentDriver_Driver] = "McLaren";
+				CurrentGridTeams[CurrentDriver_Driver] = "McLaren F1 Team";
 				TeamRenders[CurrentDriver_Driver].material.mainTexture = TeamTextures[2];
 			}
 			else if (Team_WILLIAMS.Any(Driver.Contains))
 			{
-				CurrentGridTeams[CurrentDriver_Driver] = "Williams";
+				CurrentGridTeams[CurrentDriver_Driver] = "Williams Racing";
 				TeamRenders[CurrentDriver_Driver].material.mainTexture = TeamTextures[3];
 			}
 			else if (Team_FERRARI.Any(Driver.Contains))
 			{
-				CurrentGridTeams[CurrentDriver_Driver] = "Ferrari";
+				CurrentGridTeams[CurrentDriver_Driver] = "Scuderia Ferrari Mission Winnow";
 				TeamRenders[CurrentDriver_Driver].material.mainTexture = TeamTextures[4];
 			}
 			else if (Team_HAAS.Any(Driver.Contains))
 			{
-				CurrentGridTeams[CurrentDriver_Driver] = "Haas";
+				CurrentGridTeams[CurrentDriver_Driver] = "Uralkali Haas F1 Team";
 				TeamRenders[CurrentDriver_Driver].material.mainTexture = TeamTextures[5];
 			}
 			else if (Team_ALPINE.Any(Driver.Contains))
 			{
-				CurrentGridTeams[CurrentDriver_Driver] = "Alpine";
+				CurrentGridTeams[CurrentDriver_Driver] = "Alpine F1 Team";
 				TeamRenders[CurrentDriver_Driver].material.mainTexture = TeamTextures[6];
 			}
 			else if (Team_ROMEO.Any(Driver.Contains))
 			{
-				CurrentGridTeams[CurrentDriver_Driver] = "Alfa Romeo";
+				CurrentGridTeams[CurrentDriver_Driver] = "Alfa Romeo Racing ORLEN";
 				TeamRenders[CurrentDriver_Driver].material.mainTexture = TeamTextures[7];
 			}
 			else if (Team_TAURI.Any(Driver.Contains))
 			{
-				CurrentGridTeams[CurrentDriver_Driver] = "Alpha Tauri";
+				CurrentGridTeams[CurrentDriver_Driver] = "Scuderia AlphaTauri Honda";
 				TeamRenders[CurrentDriver_Driver].material.mainTexture = TeamTextures[8];
 			}
 			else if (Team_ASTON.Any(Driver.Contains))
 			{
-				CurrentGridTeams[CurrentDriver_Driver] = "Aston Martin";
+				CurrentGridTeams[CurrentDriver_Driver] = "Aston Martin Cognizant F1 Team";
 				TeamRenders[CurrentDriver_Driver].material.mainTexture = TeamTextures[9];
 			}
 			CurrentDriver_Driver++;
@@ -2111,16 +2085,15 @@ public class GrandPrixScript : MonoBehaviour
 				Debug.LogFormat("(Grand Prix #{0}): (SYSTEM) Strike handed! Entering Strike Mode.", ModuleID);
 
 				SectorInfo_LapTextMesh.text = "Strike!";
-				CurrentLap--;
+				if (CurrentLap == LapCount)
+				{
+					CurrentLap--;
+				}
 				if (CurrentLap == GreenFlagLap)
                 {
 					CurrentLap--;
                 }
-				else if (CurrentLap < 1)
-				{
-					CurrentLap++;
-				}
-				LapCountTextMesh.text = "Lap " + CurrentLap + "/" + LapCount;
+				LapCountTextMesh.text = CurrentLap + "/" + LapCount;
 				FlagDescriptionBox.material.color = Color.red;
 
 				UpButton.gameObject.transform.localScale = new Vector3(0.08026525f, 0.0790887f, 0.1296025f);
@@ -2246,7 +2219,7 @@ public class GrandPrixScript : MonoBehaviour
 			}
 		}
 
-		LapCountTextMesh.text = "Lap " + CurrentLap + "/" + LapCount;
+		LapCountTextMesh.text = CurrentLap + "/" + LapCount;
 		return false;
     }
 
@@ -2271,7 +2244,7 @@ public class GrandPrixScript : MonoBehaviour
 				}
 			}
 
-			LapCountTextMesh.text = "Lap " + CurrentLap + "/" + LapCount;
+			LapCountTextMesh.text = CurrentLap + "/" + LapCount;
 		}
 		else
         {
@@ -2546,6 +2519,42 @@ public class GrandPrixScript : MonoBehaviour
 			}
         }
 		yield return null;
+	}
+
+	IEnumerator TwitchHandleForcedSolve()
+	{
+		while (!FinalLap) yield return true;
+		if (StrikeMode)
+		{
+			if (!Showing)
+			{
+				SubmitFlag.OnInteract();
+				yield return new WaitForSeconds(.1f);
+			}
+			DownButton.OnInteract();
+			yield return new WaitForSeconds(.1f);
+		}
+		if (SelectedSomething && EndResultsList[SelectedIndex_1] != CurrentGridDrivers[SelectedIndex_1])
+		{
+			AllNameSelectables[Array.IndexOf(CurrentGridDrivers, EndResultsList[SelectedIndex_1])].OnInteract();
+			yield return new WaitForSeconds(.1f);
+		}
+		else if (SelectedSomething)
+		{
+			AllNameSelectables[SelectedIndex_1].OnInteract();
+			yield return new WaitForSeconds(.1f);
+		}
+		for (int T = 0; T < 20; T++)
+		{
+			if (EndResultsList[T] != CurrentGridDrivers[T])
+			{
+				AllNameSelectables[T].OnInteract();
+				yield return new WaitForSeconds(.1f);
+				AllNameSelectables[Array.IndexOf(CurrentGridDrivers, EndResultsList[T])].OnInteract();
+				yield return new WaitForSeconds(.1f);
+			}
+		}
+		SubmitFlag.OnInteract();
 	}
 
 }
