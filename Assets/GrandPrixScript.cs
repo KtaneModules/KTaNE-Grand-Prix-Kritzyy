@@ -323,7 +323,7 @@ public class GrandPrixScript : MonoBehaviour
 			}
 
 			//IF THERE ARE NO NON-IGNORED MODULES, OR LESS THAN 4, AUTOSOLVE
-			if (MaxLaps < 4)
+			if (MaxLaps < 6)
 			{
 				ThisModule.HandlePass();
 				Debug.LogFormat("[Grand Prix #{0}]: (Initial) There are not enough valid modules, autosolving...", ModuleID);
