@@ -951,14 +951,20 @@ public class GrandPrixScript : MonoBehaviour
 		{
 			for (int i = 0; i < LeaderDifference.Length; i++)
 			{
-				LeaderDifference[i] += lowest;
+				if (LeaderDifference[i] <= 100)
+				{
+					LeaderDifference[i] += lowest;
+				}
 			}
 		}
 		else if (lowest > 0)
 		{
 			for (int i = 0; i < LeaderDifference.Length; i++)
 			{
-				LeaderDifference[i] -= lowest;
+				if (LeaderDifference[i] <= 100)
+				{
+					LeaderDifference[i] -= lowest;
+				}
 			}
 		}
 
