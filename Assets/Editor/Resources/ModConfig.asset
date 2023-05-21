@@ -14,8 +14,8 @@ MonoBehaviour:
   id: KritGrandPrix
   title: The Grand Prix
   author: Kritzy
-  description: "And it's lights out and away we go!\r\n\r\nManual (HTML): https://ktane.timwi.de/HTML/The%20Grand%20Prix.html\r\nManual
-    (PDF): https://ktane.timwi.de/PDF/The%20Grand%20Prix.pdf"
+  description: "And it's lights out and away we go!\r\n\nModule ID: KritGrandPrix\n\r\nManual
+    (HTML): https://ktane.timwi.de/HTML/The%20Grand%20Prix.html\r\nManual (PDF): https://ktane.timwi.de/PDF/The%20Grand%20Prix.pdf"
   version: V1
   outputFolder: build
   previewImage: {fileID: 2800000, guid: 1a57dc8e624a4614e886a5273f7bfeb2, type: 3}
