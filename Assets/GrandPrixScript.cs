@@ -860,7 +860,7 @@ public class GrandPrixScript : MonoBehaviour
                         LeaderDifference[Place] += 3;
 						PerformedAction = SectorInfoDriver + " has received a 3 second penalty.";
 					}
-					else if (History_DriverInfo[CurrentLap - 1].Contains(CurrentGridDrivers[Place])) // Since History_DriverInfo adds a '-' at the front, they wouldn't match exact. Using this to circumvent that
+					else if (CurrentLap > 1 && History_DriverInfo[CurrentLap - 2].Contains(CurrentGridDrivers[Place])) // Since History_DriverInfo adds a '-' at the front, they wouldn't match exact. Using this to circumvent that
 					{
                         Debug.LogFormat("(Grand Prix #{0}): (SYSTEM) Receiver was shown a flag in the previous lap", ModuleID);
                         LeaderDifference[Place] += 10;
