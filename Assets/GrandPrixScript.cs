@@ -131,6 +131,7 @@ public class GrandPrixScript : MonoBehaviour
 	bool FinalLap;
 	bool SelectedSomething;
 	bool StrikeMode;
+	bool TPAutoSolveValid;
 
 	int MaxLaps;
 	int CurrentLap = 1;
@@ -307,45 +308,64 @@ public class GrandPrixScript : MonoBehaviour
 			CurrentDriver_Driver++;
         }
 
-		ThisModule.OnActivate += delegate
-		{
-			//Determine maximum amount of laps
-			foreach (string ModuleName in BombInfo.GetSolvableModuleNames())
-			{
-				if (ModuleName == "The Grand Prix")
-				{
-					//Ignore this module
-				}
-				else if (!IgnoredModules.Contains(ModuleName))
-				{
-					MaxLaps++;
-				}
-			}
+        //Determine maximum amount of laps
+        foreach (string ModuleName in BombInfo.GetSolvableModuleNames())
+        {
+            if (ModuleName == "The Grand Prix")
+            {
+                //Ignore this module
+            }
+            else if (!IgnoredModules.Contains(ModuleName))
+            {
+                MaxLaps++;
+            }
+        }
 
-			//IF THERE ARE NO NON-IGNORED MODULES, OR LESS THAN 4, AUTOSOLVE
-			if (MaxLaps < 6)
-			{
-				ThisModule.HandlePass();
-				Debug.LogFormat("[Grand Prix #{0}]: (Initial) There are not enough valid modules, autosolving...", ModuleID);
-				return;
-			}
-			//Otherwise, the minimum is half the amount of normal modules
-			else
-			{
-				LapCount = Random.Range(MaxLaps / 2, MaxLaps);
-				Debug.LogFormat("[Grand Prix #{0}]: (Initial) Total lap count: {1}", ModuleID, LapCount);
-			}
+        //IF THERE ARE NO NON-IGNORED MODULES, OR LESS THAN 6, AUTOSOLVE
+        if (MaxLaps < 6)
+        {
+            Debug.LogFormat("[Grand Prix #{0}]: (Initial) There are not enough valid modules. Autosolve button is active.", ModuleID);
 
-			//Generate Green flag lap
-			GreenFlagLap = Random.Range(1, LapCount);
-			Debug.LogFormat("[Grand Prix #{0}]: (Initial) The green flag lap is at lap {1}", ModuleID, GreenFlagLap);
+			SectorInfo_LapTextMesh.text = "No Solves";
+			SectorInfo_DriverTextMesh.text = "Press flag";
 
-			//Generate first lap info
-			GenerateLapInfo();
-			StartCoroutine(CheckForSolves());
-		};
+            SubmitFlag.gameObject.transform.localPosition = new Vector3(0, -0.055f, -0.01f);
+            SubmitFlag.gameObject.transform.localEulerAngles = new Vector3(0, 0, 180);
+            SubmitFlag.gameObject.transform.localScale = new Vector3(0.8496743f, 0.2983174f, 0.8496742f);
+			SubmitFlag.GetComponent<MeshRenderer>().material.mainTexture = AllFlagTextures[8];
 
-		foreach (KMSelectable DriverButton in AllNameSelectables)
+            FlagRender.material.mainTexture = AllFlagTextures[8];
+            FlagDescriptionBox.material.color = Color.white;
+            SectorInfo_DriverTextMesh.color = Color.black;
+            SectorInfo_LapTextMesh.color = Color.black;
+
+            foreach (KMSelectable DriverButton in AllNameSelectables)
+            {
+                DriverButton.OnInteract = Empty;
+            }
+            UpButton.OnInteract = Empty;
+            DownButton.OnInteract = Empty;
+			SubmitFlag.OnInteract = ForceSolve;
+
+			TPAutoSolveValid = true;
+            return;
+        }
+        //Otherwise, the minimum is half the amount of normal modules
+        else
+        {
+            LapCount = Random.Range(MaxLaps / 2, MaxLaps);
+            Debug.LogFormat("[Grand Prix #{0}]: (Initial) Total lap count: {1}", ModuleID, LapCount);
+        }
+
+        //Generate Green flag lap
+        GreenFlagLap = Random.Range(1, LapCount);
+        Debug.LogFormat("[Grand Prix #{0}]: (Initial) The green flag lap is at lap {1}", ModuleID, GreenFlagLap);
+
+        //Generate first lap info
+        GenerateLapInfo();
+        StartCoroutine(CheckForSolves());
+
+        foreach (KMSelectable DriverButton in AllNameSelectables)
         {
 			DriverButton.OnInteract = Empty;
         }
@@ -358,6 +378,13 @@ public class GrandPrixScript : MonoBehaviour
 		DownButton.gameObject.transform.localScale = new Vector3(0, 0, 0);
 	}
 
+	protected bool ForceSolve()
+	{
+        SubmitFlag.OnInteract = Empty;
+        SubmitFlag.gameObject.SetActive(false);
+        ThisModule.HandlePass();
+        return false;
+    }
 
 	void GenerateLapInfo()
     {
@@ -2300,7 +2327,7 @@ public class GrandPrixScript : MonoBehaviour
 	}
 
 	//Twitch Plays
-	private readonly string TwitchHelpMessage = "Type !{0} swap [driver] [driver] to swap the positions of the two drivers. You can either use their acronym (HAM) or their position (#1, must include the hashtag). Type !{0} submit to submit the results. If it's incorrect, type !{0} review [#] to show the flag info for lap #, then type !{0} continue to return to the final lap submission.";
+	private readonly string TwitchHelpMessage = "Type !{0} swap [driver] [driver] to swap the positions of the two drivers. You can either use their acronym (HAM) or their position (#1, must include the hashtag). Type !{0} submit to submit the results. If it's incorrect, type !{0} review [#] to show the flag info for lap #, then type !{0} continue to return to the final lap submission. If there is less than 6 non-boss modules on the bomb, use !{0} autosolve to solve the module instantly.";
 	IEnumerator ProcessTwitchCommand(string Command)
 	{
 		Command = Command.ToLowerInvariant().Trim();
@@ -2311,7 +2338,19 @@ public class GrandPrixScript : MonoBehaviour
 			CommandArgs.Add("");
         }
 
-		if (!FinalLap)
+		if (CommandArgs[0] == "autosolve")
+		{
+			if (TPAutoSolveValid)
+			{
+                yield return ForceSolve();
+            }
+			else
+			{
+				yield return "sendtochaterror The module is not eligible for autosolve.";
+
+            }
+		}
+		else if (!FinalLap)
         {
 			yield return "sendtochat This module hasn't reached the final lap yet. It is currently at lap " + CurrentLap + " of " + LapCount + ".";
 		}
