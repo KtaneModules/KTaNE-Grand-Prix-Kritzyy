@@ -707,7 +707,7 @@ public class GrandPrixScript : MonoBehaviour
 					int DifferenceToAssign = 0;
 					for (int i = 0; i < LeaderDifference.Length; i++)
 					{
-						if (LeaderDifference[i] <= 100)
+						if (LeaderDifference[i] <= 1000000)
 						{
 							DifferenceToAssign += 2;
 							LeaderDifference[i] = DifferenceToAssign;
@@ -788,12 +788,12 @@ public class GrandPrixScript : MonoBehaviour
 						//Increase every driver's elimination spot by 1 first.
 						for (int i = 0; i < LeaderDifference.Length; i++)
 						{
-							if (LeaderDifference[i] > 100 && LeaderDifference[i] != 121)
+							if (LeaderDifference[i] > 1000000 && LeaderDifference[i] != 1000021)
 							{
 								LeaderDifference[i]++;
 							}
 						}
-						LeaderDifference[Place] = 101; //101 is the first elimination spot. Anything greater is the rest of the elimination spots.
+						LeaderDifference[Place] = 1000001; //1000001 is the first elimination spot. Anything greater is the rest of the elimination spots.
 					}
 
 					int DifferenceToAssign = 0;
@@ -803,7 +803,7 @@ public class GrandPrixScript : MonoBehaviour
 						PerformedAction += "Lit BOB is present, so deltas are reset to 2.";
 						for (int i = 0; i < LeaderDifference.Length; i++)
 						{
-							if (LeaderDifference[i] <= 100)
+							if (LeaderDifference[i] <= 1000000)
 							{
 								DifferenceToAssign += 2;
 								LeaderDifference[i] = DifferenceToAssign;
@@ -815,7 +815,7 @@ public class GrandPrixScript : MonoBehaviour
 						PerformedAction += "Lap count is equal or greater than battery count, so deltas are decreased by 5 for first 10 drivers.";
 						for (int i = 9; i >= 0; i--)
 						{
-							if (LeaderDifference[i] <= 100)
+							if (LeaderDifference[i] <= 1000000)
 							{
 								// Since the times of all the drivers are being lowered,
 								// we also have to keep the decrease from each prior driver in mind
@@ -833,7 +833,7 @@ public class GrandPrixScript : MonoBehaviour
 						{
 							if (!Even)
                             {
-								if (LeaderDifference[i] <= 100)
+								if (LeaderDifference[i] <= 1000000)
 								{
 									DifferenceToAssign += 2;
 									LeaderDifference[i] = DifferenceToAssign;
@@ -944,12 +944,12 @@ public class GrandPrixScript : MonoBehaviour
 					//Increase every driver's elimination spot by 1 first.
 					for (int i = 0; i < LeaderDifference.Length; i++)
 					{
-						if (LeaderDifference[i] > 100 && LeaderDifference[i] != 121)
+						if (LeaderDifference[i] > 1000000 && LeaderDifference[i] != 1000021)
 						{
 							LeaderDifference[i]++;
 						}
 					}
-					LeaderDifference[Place] = 101; //101 is the first elimination spot. Anything greater is the rest of the elimination spots.
+					LeaderDifference[Place] = 1000001; //1000001 is the first elimination spot. Anything greater is the rest of the elimination spots.
 					break;
 				}
 			case "Black":
@@ -968,7 +968,7 @@ public class GrandPrixScript : MonoBehaviour
 							break;
 						}
 					}
-					LeaderDifference[Place] = 121; //121 is the spot for the one disqualified.
+					LeaderDifference[Place] = 1000021; //1000021 is the spot for the one disqualified.
 					break;
 				}
 		}
@@ -978,7 +978,7 @@ public class GrandPrixScript : MonoBehaviour
 		{
 			for (int i = 0; i < LeaderDifference.Length; i++)
 			{
-				if (LeaderDifference[i] <= 100)
+				if (LeaderDifference[i] <= 1000000)
 				{
 					LeaderDifference[i] += lowest;
 				}
@@ -988,7 +988,7 @@ public class GrandPrixScript : MonoBehaviour
 		{
 			for (int i = 0; i < LeaderDifference.Length; i++)
 			{
-				if (LeaderDifference[i] <= 100)
+				if (LeaderDifference[i] <= 1000000)
 				{
 					LeaderDifference[i] -= lowest;
 				}
